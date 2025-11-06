@@ -1,26 +1,30 @@
-# E-commerce Platform (Medusa + Next.js)
+# Medusa E-Commerce Platform
 
-Full-stack e-commerce system built with **MedusaJS**, **Next.js**, and **TypeScript**.  
-Implements a complete store pipeline — from customer registration to order fulfillment.
+A full-stack e-commerce system built with **MedusaJS**, **Next.js**, and **TypeScript**.  
+Implements a complete workflow — from user authentication and checkout to payment processing and automated order notifications.
 
-## 🧩 Features
-- 🔐 User authentication & account management  
-- 💳 Checkout with Stripe payments  
-- 🧾 Order management with shipping and billing details  
-- ✉️ Email and Telegram notifications on new orders  
-- 📦 Admin dashboard for products, orders, and customers  
-- 🧠 Modular structure (ready for custom extensions or analytics integrations)
+---
 
-## 🏗️ Tech Stack
-- **Backend:** MedusaJS (Node.js, TypeScript)
-- **Frontend:** Next.js + TailwindCSS
-- **Database:** PostgreSQL
-- **Notifications:** NodeMailer, Telegram Bot API
-- **Deployment:** Vercel / Render
+## Overview
+The platform consists of a custom Medusa backend connected to a modern Next.js storefront.  
+It supports user accounts, secure payments, order tracking, and integrations with both email and Telegram for instant communication.
 
-## 🚀 Setup
-```bash
-git clone https://github.com/Danylo16/medusa-wear-ecommerce
-cd medusa-wear-ecommerce
-yarn install
-yarn dev
+---
+
+## Features
+- Full user authentication (sign-up, login, session handling)
+- Complete checkout and payment flow
+- Order management and shipment tracking
+- Automated notifications via email and Telegram
+- Admin interface for product and customer management
+- SEO-optimized, responsive storefront
+
+---
+
+## Tech Stack
+**Frontend:** Next.js, React, TailwindCSS  
+**Backend:** MedusaJS, Node.js, TypeScript  
+**Database:** PostgreSQL  
+**Messaging:** Resend, Telegram Bot API  
+**Deployment:** Vercel / Railway
+  
