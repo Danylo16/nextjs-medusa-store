@@ -1,0 +1,26 @@
+# E-commerce Platform (Medusa + Next.js)
+
+Full-stack e-commerce system built with **MedusaJS**, **Next.js**, and **TypeScript**.  
+Implements a complete store pipeline — from customer registration to order fulfillment.
+
+## 🧩 Features
+- 🔐 User authentication & account management  
+- 💳 Checkout with Stripe payments  
+- 🧾 Order management with shipping and billing details  
+- ✉️ Email and Telegram notifications on new orders  
+- 📦 Admin dashboard for products, orders, and customers  
+- 🧠 Modular structure (ready for custom extensions or analytics integrations)
+
+## 🏗️ Tech Stack
+- **Backend:** MedusaJS (Node.js, TypeScript)
+- **Frontend:** Next.js + TailwindCSS
+- **Database:** PostgreSQL
+- **Notifications:** NodeMailer, Telegram Bot API
+- **Deployment:** Vercel / Render
+
+## 🚀 Setup
+```bash
+git clone https://github.com/Danylo16/medusa-wear-ecommerce
+cd medusa-wear-ecommerce
+yarn install
+yarn dev
