@@ -61,7 +61,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
   const product = await listProducts({
     countryCode: params.countryCode,
-    queryParams: { handle },
+    // TS тут ниє що 'handle' немає в типі, але бекенд його підтримує → глушимо any
+    queryParams: { handle } as any,
   }).then(({ response }) => response.products[0])
 
   if (!product) {
@@ -89,13 +90,14 @@ export default async function ProductPage(props: Props) {
 
   const pricedProduct = await listProducts({
     countryCode: params.countryCode,
-    queryParams: { handle: params.handle },
+    // те саме: TS не знає про handle, бекенд знає
+    queryParams: { handle: params.handle } as any,
   }).then(({ response }) => response.products[0])
 
   if (!pricedProduct) {
     notFound()
   }
-
+ 
   return (
     <ProductTemplate
       product={pricedProduct}

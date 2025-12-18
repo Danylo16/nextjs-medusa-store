@@ -5,16 +5,27 @@ import CheckoutForm from "@modules/checkout/templates/checkout-form"
 import CheckoutSummary from "@modules/checkout/templates/checkout-summary"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
+import { redirect } from "next/navigation"
 
 export const metadata: Metadata = {
   title: "Checkout",
 }
 
-export default async function Checkout() {
-  const cart = await retrieveCart()
+type CheckoutPageProps = {
+  params: {
+    countryCode: string
+  }
+  searchParams?: {
+    step?: string
+  }
+}
 
+export default async function Checkout({ params, searchParams }: CheckoutPageProps) {
+  const cart = await retrieveCart()
+  const { countryCode } = params
+  
   if (!cart) {
-    return notFound()
+  redirect(`/${countryCode}/cart`)
   }
 
   const customer = await retrieveCustomer()

@@ -1,9 +1,90 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import "tailwindcss";
 
+/* ==== ТУТ МИ ВИЗНАЧАЄМО ВСІ ТОКЕНИ ДИЗАЙНУ ДЛЯ TAILWIND V4 ==== */
+@theme {
+  /* КОЛЬОРИ */
+  --color-primary: #4BAF8C;
+  --color-primary-foreground: #FFFFFF;
+  --color-primary-light: #CDEEE1;
+  --color-primary-dark: #2D7B61;
+
+  --color-accent:  #f29999;
+  --color-accent-light: #FAD9CC;
+  --color-accent-dark: #D86C47;
+
+  --color-secondary: #F7DDE2;
+  --color-secondary-light: #FBEFF2;
+  --color-secondary-dark: #E8BAC3;
+
+  --color-background: oklch(0.98 0 0);
+  --color-card: #FFFFFF;
+  --color-muted: #E5E7EB;
+  --color-foreground: #141414;
+
+  /* РАДІУСИ (rounded-xl, rounded-lg, ...) */
+  --radius-xl: 16px;
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 6px;
+
+  /* ТІНІ (shadow-soft, shadow-medium) */
+  --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.05);
+  --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.08);
+
+  /* ШРИФТИ */
+  --font-sans: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-heading: Geist, Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ===== BASE ===== */
+@layer base {
+  html,
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  body {
+    @apply min-h-screen;
+  }
+
+  a {
+    @apply text-primary hover:text-primary-dark transition-colors duration-200;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading text-foreground;
+  }
+
+  h1 {
+    @apply text-[32px] leading-[44px] font-semibold md:text-[40px] md:leading-[52px];
+  }
+
+  h2 {
+    @apply text-[24px] leading-[32px] font-semibold md:text-[30px] md:leading-[40px];
+  }
+
+  h3 {
+    @apply text-[20px] leading-[28px] font-semibold;
+  }
+
+  h4 {
+    @apply text-base leading-6 font-semibold;
+  }
+
+  p {
+    @apply text-sm leading-6 font-normal;
+  }
+
+  .dark body {
+    @apply bg-foreground text-background;
+  }
+}
+
+/* ===== UTILITIES ===== */
 @layer utilities {
-  /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
@@ -13,14 +94,15 @@
   }
 
   .no-scrollbar {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
-  input:focus ~ label,
-  input:not(:placeholder-shown) ~ label {
-    @apply -translate-y-2 text-xsmall-regular;
-  }
+input:focus ~ label,
+input:not(:placeholder-shown) ~ label {
+  @apply -translate-y-2 text-[10px] leading-4 font-normal;
+}
+
 
   input:focus ~ label {
     @apply left-0;
@@ -35,9 +117,9 @@
   select:-webkit-autofill,
   select:-webkit-autofill:hover,
   select:-webkit-autofill:focus {
-    border: 1px solid #212121;
-    -webkit-text-fill-color: #212121;
-    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+    border: 1px solid #4BAF8C;           /* primary */
+    -webkit-text-fill-color: #141414;    /* foreground */
+    -webkit-box-shadow: 0 0 0px 1000px #ffffff inset; /* card */
     transition: background-color 5000s ease-in-out 0s;
   }
 
@@ -49,18 +131,30 @@
   }
 }
 
+/* ===== COMPONENTS ===== */
 @layer components {
   .content-container {
-    @apply max-w-[1440px] w-full mx-auto px-6;
+    @apply max-w-[1440px] w-full mx-auto px-4 md:px-6;
+  }
+
+  .section {
+    @apply w-full py-8 md:py-12;
+  }
+
+  .section-alt {
+    @apply w-full py-8 md:py-12 bg-secondary-light/40;
+  }
+
+  .card-soft {
+    @apply bg-card rounded-xl shadow-soft;
   }
 
   .contrast-btn {
-    @apply px-4 py-2 border border-black rounded-full hover:bg-black hover:text-white transition-colors duration-200 ease-in;
+    @apply px-4 py-2 rounded-full border border-primary text-primary
+           bg-transparent hover:bg-primary hover:text-primary-foreground
+           transition-colors duration-200 ease-in-out;
   }
-
-  .text-xsmall-regular {
-    @apply text-[10px] leading-4 font-normal;
-  }
+ 
 
   .text-small-regular {
     @apply text-xs leading-5 font-normal;
@@ -110,3 +204,4 @@
     @apply text-[32px] leading-[44px] font-semibold;
   }
 }
+

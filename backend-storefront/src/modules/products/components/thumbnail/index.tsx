@@ -1,16 +1,16 @@
-import { Container, clx } from "@medusajs/ui"
-import Image from "next/image"
 import React from "react"
-
+import Image from "next/image"
+import { clx } from "@medusajs/ui"
 import PlaceholderImage from "@modules/common/icons/placeholder-image"
 
 type ThumbnailProps = {
   thumbnail?: string | null
-  // TODO: Fix image typings
-  images?: any[] | null
+  images?: { url?: string | null }[] | null
   size?: "small" | "medium" | "large" | "full" | "square"
   isFeatured?: boolean
   className?: string
+  fit?: "contain" | "cover"
+  priority?: boolean
   "data-testid"?: string
 }
 
@@ -20,49 +20,72 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   size = "small",
   isFeatured,
   className,
+  fit = "contain",
+  priority = false,
   "data-testid": dataTestid,
 }) => {
-  const initialImage = thumbnail || images?.[0]?.url
+  const initialImage = thumbnail || images?.[0]?.url || undefined
+
+  // більш “товарні” пропорції: квадрат або 4:5 (типовий ecom)
+  const aspectClass =
+    size === "square"
+      ? "aspect-square"
+      : isFeatured
+        ? "aspect-[4/5]"
+        : "aspect-[4/5]"
+
+  const widthClass =
+    size === "small"
+      ? "w-[180px]"
+      : size === "medium"
+        ? "w-[290px]"
+        : size === "large"
+          ? "w-[440px]"
+          : "w-full"
+
+  // sizes під твої фактичні ширини, а не “800 просто так”
+  const sizes =
+    size === "small"
+      ? "180px"
+      : size === "medium"
+        ? "290px"
+        : size === "large"
+          ? "440px"
+          : "(max-width: 640px) 92vw, (max-width: 1024px) 45vw, 360px"
 
   return (
-    <Container
+    <div
       className={clx(
-        "relative w-full overflow-hidden p-4 bg-ui-bg-subtle shadow-elevation-card-rest rounded-large group-hover:shadow-elevation-card-hover transition-shadow ease-in-out duration-150",
-        className,
-        {
-          "aspect-[11/14]": isFeatured,
-          "aspect-[9/16]": !isFeatured && size !== "square",
-          "aspect-[1/1]": size === "square",
-          "w-[180px]": size === "small",
-          "w-[290px]": size === "medium",
-          "w-[440px]": size === "large",
-          "w-full": size === "full",
-        }
+        "relative overflow-hidden rounded-2xl bg-white",
+        "ring-1 ring-black/5",
+        "transition-transform duration-200 ease-out group-hover:scale-[1.01]",
+        aspectClass,
+        widthClass,
+        className
       )}
       data-testid={dataTestid}
     >
-      <ImageOrPlaceholder image={initialImage} size={size} />
-    </Container>
-  )
-}
-
-const ImageOrPlaceholder = ({
-  image,
-  size,
-}: Pick<ThumbnailProps, "size"> & { image?: string }) => {
-  return image ? (
-    <Image
-      src={image}
-      alt="Thumbnail"
-      className="absolute inset-0 object-cover object-center"
-      draggable={false}
-      quality={50}
-      sizes="(max-width: 576px) 280px, (max-width: 768px) 360px, (max-width: 992px) 480px, 800px"
-      fill
-    />
-  ) : (
-    <div className="w-full h-full absolute inset-0 flex items-center justify-center">
-      <PlaceholderImage size={size === "small" ? 16 : 24} />
+      {initialImage ? (
+        <Image
+          src={initialImage}
+          alt="Product image"
+          fill
+          draggable={false}
+          priority={priority}
+          quality={85}
+          sizes={sizes}
+          className={clx(
+            "absolute inset-0",
+            fit === "contain"
+              ? "object-contain object-center p-3"
+              : "object-cover object-center"
+          )}
+        />
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <PlaceholderImage size={size === "small" ? 16 : 24} />
+        </div>
+      )}
     </div>
   )
 }

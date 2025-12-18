@@ -1,5 +1,6 @@
+// src/lib/data/categories.ts
 import { sdk } from "@lib/config"
-import { HttpTypes } from "@medusajs/types"
+import type { HttpTypes } from "@medusajs/types"
 import { getCacheOptions } from "./cookies"
 
 export const listCategories = async (query?: Record<string, any>) => {
@@ -26,24 +27,26 @@ export const listCategories = async (query?: Record<string, any>) => {
     .then(({ product_categories }) => product_categories)
 }
 
-export const getCategoryByHandle = async (categoryHandle: string[]) => {
-  const handle = `${categoryHandle.join("/")}`
+// НОРМАЛЬНА версія
+export const getCategoryByHandle = async (handle: string) => {
+  const cacheOptions = await getCacheOptions("categories")
 
-  const next = {
-    ...(await getCacheOptions("categories")),
-  }
-
-  return sdk.client
-    .fetch<HttpTypes.StoreProductCategoryListResponse>(
+  const { product_categories } =
+    await sdk.client.fetch<HttpTypes.StoreProductCategoryListResponse>(
       `/store/product-categories`,
       {
         query: {
-          fields: "*category_children, *products",
-          handle,
+          fields: "*category_children, *parent_category",
+          handle: [handle],      // КЛЮЧОВЕ
+          limit: 1,
         },
-        next,
+        next: {
+          ...cacheOptions,
+          revalidate: 60,
+        },
         cache: "force-cache",
       }
     )
-    .then(({ product_categories }) => product_categories[0])
+
+  return product_categories[0] || null
 }
