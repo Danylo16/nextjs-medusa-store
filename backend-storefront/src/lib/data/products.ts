@@ -7,6 +7,22 @@ import { SortOptions } from "@modules/store/components/refinement-list/sort-prod
 import { getAuthHeaders, getCacheOptions } from "./cookies"
 import { getRegion, retrieveRegion } from "./regions"
 
+const DEFAULT_PRODUCT_FIELDS = [
+  "*variants.calculated_price",
+  "+variants.sku",
+  "+variants.prices",
+  "+metadata",
+  "+tags",
+
+  // ✅ categories (explicit fields, otherwise you get empty objects)
+  "+categories.id",
+  "+categories.name",
+  "+categories.handle",
+  "+categories.parent_category.id",
+  "+categories.parent_category.name",
+  "+categories.parent_category.handle",
+].join(",")
+
 export const listProducts = async ({
   pageParam = 1,
   queryParams,
@@ -28,7 +44,7 @@ export const listProducts = async ({
 
   const limit = queryParams?.limit || 12
   const _pageParam = Math.max(pageParam, 1)
-  const offset = (_pageParam === 1) ? 0 : (_pageParam - 1) * limit;
+  const offset = _pageParam === 1 ? 0 : (_pageParam - 1) * limit
 
   let region: HttpTypes.StoreRegion | undefined | null
 
@@ -49,28 +65,34 @@ export const listProducts = async ({
     ...(await getAuthHeaders()),
   }
 
+  // Default cache options for product listings
   const next = {
     ...(await getCacheOptions("products")),
   }
 
+  // ✅ If fetching a single product by handle, do NOT force-cache (admin changes must show up)
+  const handle = (queryParams as any)?.handle
+  const isSingleByHandle = typeof handle === "string" && handle.trim().length > 0
+
   return sdk.client
-    .fetch<{ products: HttpTypes.StoreProduct[]; count: number }>(
-      `/store/products`,
-      {
-        method: "GET",
-        query: {
-          limit,
-          offset,
-          region_id: region?.id,
-          fields:
-            "*variants.calculated_price,+variants.inventory_quantity,+metadata,+tags",
-          ...queryParams,
-        },
-        headers,
-        next,
-        cache: "force-cache",
-      }
-    )
+    .fetch<{ products: HttpTypes.StoreProduct[]; count: number }>(`/store/products`, {
+      method: "GET",
+      query: {
+        limit,
+        offset,
+        region_id: region.id,
+
+        // ✅ Default fields (can be overridden by queryParams.fields if you pass it explicitly)
+        fields: DEFAULT_PRODUCT_FIELDS,
+
+        ...queryParams,
+      },
+      headers,
+
+      // ✅ Listings can be cached; single product by handle should not
+      next: isSingleByHandle ? undefined : next,
+      cache: isSingleByHandle ? "no-store" : "force-cache",
+    })
     .then(({ products, count }) => {
       const nextPage = count > offset + limit ? pageParam + 1 : null
 
@@ -79,7 +101,7 @@ export const listProducts = async ({
           products,
           count,
         },
-        nextPage: nextPage,
+        nextPage,
         queryParams,
       }
     })
@@ -120,9 +142,7 @@ export const listProductsWithSort = async ({
   const sortedProducts = sortProducts(products, sortBy)
 
   const pageParam = (page - 1) * limit
-
   const nextPage = count > pageParam + limit ? pageParam + limit : null
-
   const paginatedProducts = sortedProducts.slice(pageParam, pageParam + limit)
 
   return {

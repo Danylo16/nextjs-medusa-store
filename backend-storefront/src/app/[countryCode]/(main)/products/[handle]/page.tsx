@@ -87,12 +87,14 @@ export default async function ProductPage(props: Props) {
   if (!region) {
     notFound()
   }
-
+  
   const pricedProduct = await listProducts({
     countryCode: params.countryCode,
     // те саме: TS не знає про handle, бекенд знає
     queryParams: { handle: params.handle } as any,
   }).then(({ response }) => response.products[0])
+
+  console.log("CATEGORIES:", pricedProduct.categories)
 
   if (!pricedProduct) {
     notFound()

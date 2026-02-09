@@ -1,9 +1,10 @@
-import { listProducts } from "@lib/data/products"
+import { sdk } from "@lib/config"
 import { HttpTypes } from "@medusajs/types"
 import ProductActions from "@modules/products/components/product-actions"
 
 /**
- * Fetches real time pricing for a product and renders the product actions component.
+ * Retrieve a single product by ID (recommended by Medusa) and render actions.
+ * This avoids abusing the list endpoint with unsupported query params.
  */
 export default async function ProductActionsWrapper({
   id,
@@ -12,14 +13,11 @@ export default async function ProductActionsWrapper({
   id: string
   region: HttpTypes.StoreRegion
 }) {
-  const product = await listProducts({
-    queryParams: { id: [id] },
-    regionId: region.id,
-  }).then(({ response }) => response.products[0])
+  const { product } = await sdk.store.product.retrieve(id, {
+    region_id: region.id,
+  })
 
-  if (!product) {
-    return null
-  }
+  if (!product) return null
 
   return <ProductActions product={product} region={region} />
 }

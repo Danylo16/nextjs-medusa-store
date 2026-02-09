@@ -20,6 +20,7 @@
   --color-card: #FFFFFF;
   --color-muted: #E5E7EB;
   --color-foreground: #141414;
+  --color-border: oklch(.93 0 0); 
 
   /* РАДІУСИ (rounded-xl, rounded-lg, ...) */
   --radius-xl: 16px;
@@ -203,5 +204,46 @@ input:not(:placeholder-shown) ~ label {
   .text-3xl-semi {
     @apply text-[32px] leading-[44px] font-semibold;
   }
+    /* Blog typography wrapper */
+  .blog-content {
+    /* Better line breaking for long Ukrainian strings */
+    text-wrap: pretty;
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+
+  .blog-content p {
+    @apply text-[15px] leading-7 text-foreground/90;
+  }
+
+  .blog-content a {
+    @apply underline underline-offset-4 decoration-black/20 hover:decoration-black/35 transition;
+  }
+
+  .blog-content :is(h1, h2, h3, h4, h5, h6) {
+    scroll-margin-top: 96px;
+  }
+
+  .blog-content figcaption {
+    @apply mt-2 text-center text-xs text-black/45;
+  }
+
+  .blog-content :is(ul, ol) {
+    @apply ml-6 mt-4 space-y-2;
+  }
+
+  .blog-content blockquote {
+    @apply mt-6 rounded-2xl border-l-4 border-black/15 bg-black/5 px-5 py-4 text-[15px] text-foreground/90;
+  }
+
+  .blog-content pre {
+    @apply mt-6 overflow-x-auto rounded-2xl bg-black/90 p-4 text-[13px] leading-6 text-white;
+  }
+
+  .blog-content code {
+    @apply rounded-md bg-black/5 px-1.5 py-0.5 font-mono text-[13px] text-foreground;
+  }
+  
+
 }
 

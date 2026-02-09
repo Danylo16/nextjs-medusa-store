@@ -1,19 +1,13 @@
-import InteractiveLink from "@modules/common/components/interactive-link"
-import { Metadata } from "next"
+import type { Metadata } from "next"
+import NotFoundView from "@modules/common/components/not-found-view"
 
 export const metadata: Metadata = {
-  title: "404",
-  description: "Something went wrong",
+  title: "404 — Сторінку не знайдено",
+  description:
+    "Цей крок оформлення не існує або був переміщений.",
+  robots: { index: false, follow: true },
 }
 
-export default async function NotFound() {
-  return (
-    <div className="flex flex-col gap-4 items-center justify-center min-h-[calc(100vh-64px)]">
-      <h1 className="text-2xl-semi text-ui-fg-base">Page not found</h1>
-      <p className="text-small-regular text-ui-fg-base">
-        The page you tried to access does not exist.
-      </p>
-      <InteractiveLink href="/">Go to frontpage</InteractiveLink>
-    </div>
-  )
+export default function NotFound() {
+  return <NotFoundView variant="checkout" />
 }

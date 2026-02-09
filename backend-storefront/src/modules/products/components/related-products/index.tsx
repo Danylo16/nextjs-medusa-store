@@ -1,7 +1,8 @@
- import { listProducts } from "@lib/data/products"
+import { listProducts } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
 import { HttpTypes } from "@medusajs/types"
 import Product from "../product-preview"
+import RelatedProductsSlider from "./related-products-slider"
 
 type RelatedProductsProps = {
   product: HttpTypes.StoreProduct
@@ -34,8 +35,9 @@ export default async function RelatedProducts({
     return response.products.filter((p) => p.id !== product.id)
   }
 
-  // 1) Спершу — тільки по колекції (найчистіший зв’язок)
   let products: HttpTypes.StoreProduct[] = []
+
+  // 1) collection
   if (product.collection_id) {
     products = await fetchProducts({
       ...baseParams,
@@ -43,7 +45,7 @@ export default async function RelatedProducts({
     })
   }
 
-  // 2) Якщо мало — пробуємо по тегах (ширше, але релевантно)
+  // 2) tags
   if (products.length < 4 && product.tags?.length) {
     const tagIds = product.tags.map((t) => t.id).filter(Boolean) as string[]
     if (tagIds.length) {
@@ -54,36 +56,24 @@ export default async function RelatedProducts({
     }
   }
 
-  // 3) Fallback — просто будь-що (щоб блок не зникав)
+  // 3) fallback
   if (!products.length) {
     products = await fetchProducts(baseParams)
   }
 
+  products = products.slice(0, 12)
   if (!products.length) return null
 
   return (
     <div className="product-page-constraint">
-      <div className="flex flex-col items-center text-center mb-16">
-        <span className="text-base-regular text-gray-600 mb-6">
-          Пов'язані товари
-        </span>
-        <p className="text-2xl-regular text-ui-fg-base max-w-lg">
-          Вам також можуть сподобатися ці товари
-        </p>
-      </div>
-
-       <div className="overflow-x-auto no-scrollbar -mx-4 px-4">
-  <ul className="flex items-stretch gap-6 snap-x snap-mandatory py-4">
-    {products.slice(0, 12).map((p) => (
-      <li
-  key={p.id}
-  className="shrink-0 snap-start w-[260px] sm:w-[280px] md:w-[320px] h-full"
->
-  <Product region={region} product={p} countryCode={countryCode} />
-</li>
-    ))}
-  </ul>
-</div>
+      <RelatedProductsSlider
+        title="Пов'язані товари"
+        subtitle="Вам також можуть сподобатися ці товари"
+      >
+        {products.map((p) => (
+          <Product key={p.id} region={region} product={p} countryCode={countryCode} />
+        ))}
+      </RelatedProductsSlider>
     </div>
   )
 }

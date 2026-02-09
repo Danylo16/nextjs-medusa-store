@@ -5,7 +5,7 @@ import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 export const metadata: Metadata = {
-  title: "Cart",
+  title: "Кошик",
   description: "View your cart",
 }
 
@@ -15,7 +15,7 @@ export default async function Cart() {
     return notFound()
   })
 
-  const customer = await retrieveCustomer()
+ 
 
-  return <CartTemplate cart={cart} customer={customer} />
+  return <CartTemplate cart={cart}  />
 }

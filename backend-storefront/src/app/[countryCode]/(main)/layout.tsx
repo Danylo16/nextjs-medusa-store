@@ -1,35 +1,27 @@
-import { Metadata } from "next"
+import Nav from "@modules/layout/templates/nav"
+import { Footer } from "@modules/layout/templates/footer"
+import CartMismatchBanner from "@modules/layout/components/cart-mismatch-banner"
+import FreeShippingPriceNudge from "@modules/shipping/components/free-shipping-price-nudge"
 
 import { listCartOptions, retrieveCart } from "@lib/data/cart"
 import { retrieveCustomer } from "@lib/data/customer"
-import { getBaseURL } from "@lib/util/env"
-import { StoreCartShippingOption } from "@medusajs/types"
-import CartMismatchBanner from "@modules/layout/components/cart-mismatch-banner"
-import { Footer } from "@modules/layout/templates/footer" 
-import Nav from "@modules/layout/templates/nav"
-import FreeShippingPriceNudge from "@modules/shipping/components/free-shipping-price-nudge"
+import type { StoreCartShippingOption } from "@medusajs/types"
 
-export const metadata: Metadata = {
-  metadataBase: new URL(getBaseURL()),
-}
+export default async function MainLayout(props: { children: React.ReactNode }) {
+  // Fetch in parallel to reduce TTFB
+  const [customer, cart] = await Promise.all([retrieveCustomer(), retrieveCart()])
 
-export default async function PageLayout(props: { children: React.ReactNode }) {
-  const customer = await retrieveCustomer()
-  const cart = await retrieveCart()
   let shippingOptions: StoreCartShippingOption[] = []
-
   if (cart) {
     const { shipping_options } = await listCartOptions()
-
     shippingOptions = shipping_options
   }
 
   return (
-    <>
+    <div className="min-h-dvh flex flex-col">
       <Nav />
-      {customer && cart && (
-        <CartMismatchBanner customer={customer} cart={cart} />
-      )}
+
+      {customer && cart && <CartMismatchBanner customer={customer} cart={cart} />}
 
       {cart && (
         <FreeShippingPriceNudge
@@ -38,8 +30,11 @@ export default async function PageLayout(props: { children: React.ReactNode }) {
           shippingOptions={shippingOptions}
         />
       )}
-      {props.children}
+
+      {/* Proper landmark: only page content goes into <main> */}
+      <main className="flex-1">{props.children}</main>
+
       <Footer />
-    </>
+    </div>
   )
 }

@@ -2,7 +2,7 @@
 
 export const categories = [
   {
-    handle: "mtb-kinesitherapy-trenazhery", // 1:1 з Medusa (без початкового "/")
+    handle: "mtb-kinesitherapy-trenazhery", 
     title: "Тренажери для кінезітерапії МТБ",
     imageSrc: "/images/hero-categories/mtb-machines.jpg",
     imageAlt: "MTB kinesitherapy machines in a rehab clinic",
@@ -10,7 +10,7 @@ export const categories = [
   {
     handle: "mtb-aksesuary",
     title: "Аксесуари до тренажерів МТБ",
-    imageSrc: "/images/hero-categories/ ",
+    imageSrc: "/images/hero-categories/accessories.png", 
     imageAlt: "Accessories for MTB rehabilitation machines",
   },
   {
@@ -22,7 +22,7 @@ export const categories = [
   {
     handle: "brusy-skhody-obladnannya",
     title: "Бруси, сходи та інше обладнання",
-    imageSrc: "/images/categories/bars-swedish-walls.jpg",
+    imageSrc: "/images/hero-categories/bars-swedish-walls.jpg",
     imageAlt: "Parallel bars and Swedish wall for rehabilitation",
   },
 ]

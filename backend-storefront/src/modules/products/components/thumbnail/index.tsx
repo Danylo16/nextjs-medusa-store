@@ -25,14 +25,10 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   "data-testid": dataTestid,
 }) => {
   const initialImage = thumbnail || images?.[0]?.url || undefined
+  const isFill = size === "full"
 
-  // більш “товарні” пропорції: квадрат або 4:5 (типовий ecom)
   const aspectClass =
-    size === "square"
-      ? "aspect-square"
-      : isFeatured
-        ? "aspect-[4/5]"
-        : "aspect-[4/5]"
+    size === "square" ? "aspect-square" : isFeatured ? "aspect-[4/5]" : "aspect-[4/5]"
 
   const widthClass =
     size === "small"
@@ -43,7 +39,6 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
           ? "w-[440px]"
           : "w-full"
 
-  // sizes під твої фактичні ширини, а не “800 просто так”
   const sizes =
     size === "small"
       ? "180px"
@@ -56,11 +51,11 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   return (
     <div
       className={clx(
-        "relative overflow-hidden rounded-2xl bg-white",
-        "ring-1 ring-black/5",
-        "transition-transform duration-200 ease-out group-hover:scale-[1.01]",
-        aspectClass,
-        widthClass,
+        "relative overflow-hidden",
+        isFill
+          ? "w-full h-full" // parent already defines aspect/size
+          : clx("rounded-2xl bg-white ring-1 ring-black/5", aspectClass, widthClass),
+        !isFill && "transition-transform duration-200 ease-out group-hover:scale-[1.01]",
         className
       )}
       data-testid={dataTestid}
@@ -77,7 +72,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
           className={clx(
             "absolute inset-0",
             fit === "contain"
-              ? "object-contain object-center p-3"
+              ? "object-contain object-center p-2"
               : "object-cover object-center"
           )}
         />

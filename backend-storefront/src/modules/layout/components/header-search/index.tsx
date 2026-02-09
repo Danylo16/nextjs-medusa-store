@@ -1,7 +1,7 @@
 "use client"
 
 import { FormEvent, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { Search } from "lucide-react"
 
 type HeaderSearchProps = {
@@ -11,13 +11,14 @@ type HeaderSearchProps = {
 export default function HeaderSearch({ className = "" }: HeaderSearchProps) {
   const [value, setValue] = useState("")
   const router = useRouter()
+  const { countryCode } = useParams<{ countryCode: string }>()
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     const q = value.trim()
     if (!q) return
 
-    router.push(`search?q=${encodeURIComponent(q)}`)
+    router.push(`/${countryCode}/search?q=${encodeURIComponent(q)}`)
   }
 
   return (
@@ -27,7 +28,7 @@ export default function HeaderSearch({ className = "" }: HeaderSearchProps) {
     >
       <input
         type="search"
-        placeholder="Search..."
+        placeholder="Пошук..."
         value={value}
         onChange={(e) => setValue(e.target.value)}
         className="

@@ -10,7 +10,7 @@ import { isEqual } from "lodash"
 import { useParams } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 import ProductPrice from "../product-price"
-import MobileActions from "./mobile-actions"
+ 
 import type { ReactNode } from "react"
 
 type ProductActionsProps = {
@@ -173,17 +173,7 @@ export default function ProductActions({
         </Button>
       )}
 
-      <MobileActions
-        product={product}
-        variant={selectedVariant}
-        options={options}
-        updateOptions={setOptionValue}
-        inStock={inStock}
-        handleAddToCart={handleAddToCart}
-        isAdding={isAdding}
-        show={!inView}
-        optionsDisabled={!!disabled || isAdding}
-      />
+       
     </div>
   )
 }

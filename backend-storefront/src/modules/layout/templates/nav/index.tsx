@@ -11,9 +11,9 @@ import Image from "next/image"
 
 const navigationLinks = [
   { label: "Товари", href: "/store" },
-  { label: "Галерея", href: "#services" },
-  { label: "Про нас", href: "#about" },
-  { label: "Блог", href: "#blog" },
+  { label: "Галерея", href: "/#gallery" },
+  { label: "Про нас", href: "/about" },
+  { label: "Блог", href: "/blog" },
 ]
 
 export default async function Nav() {
@@ -21,10 +21,10 @@ export default async function Nav() {
 
   return (
     <header className="sticky top-0 z-50 bg-card shadow-sm">
-      {/* без нижньої рамки, тільки тінь */}
+      {/* No bottom border, shadow only */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* === ЛІВИЙ КЛАСТЕР: бургер + лого + назва === */}
+          {/* === LEFT CLUSTER: burger + logo + name === */}
           <div className="flex items-center gap-3">
             <div className="h-full flex items-center md:hidden">
               <SideMenu regions={regions} />
@@ -51,7 +51,7 @@ export default async function Nav() {
             </LocalizedClientLink>
           </div>
 
-          {/* === ЦЕНТР: навігація + ПОШУК (в одному блоці) === */}
+          {/* === CENTER: navigation + SEARCH (in one block) === */}
           <div className="hidden md:flex items-center gap-8 flex-1 mx-8">
             <nav className="flex items-center gap-6">
               {navigationLinks.map((link) => (
@@ -70,15 +70,15 @@ export default async function Nav() {
             </div>
           </div>
 
-          {/* === ПРАВИЙ КЛАСТЕР: телефони / мейл / акаунт / кошик === */}
+          {/* === RIGHT CLUSTER: phone / email / account / cart === */}
           <div className="flex items-center gap-4">
             <div className="hidden lg:flex items-center gap-6">
               <a
-                href="tel:+15551234567"
+                href="/contacts"
                 className="flex items-center gap-2 text-sm text-foreground hover:text-primary transition-colors"
               >
                 <Phone className="w-4 h-4" />
-                <span className="hidden xl:inline">(555) 123-4567</span>
+                <span className="hidden xl:inline">(050) 585-9344</span>
               </a>
               <a
                 href="mailto:info@mtb1-4.com"

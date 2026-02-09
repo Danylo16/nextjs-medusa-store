@@ -2,7 +2,10 @@ import { Metadata } from "next"
 
 import ProductCategoriesSection from "@modules/home/components/product-categories" 
 import Hero from "@modules/home/components/hero"
+import { GallerySection } from "@modules/home/components/gallery/gallery-section"
+import ClientsCarousel from "@modules/home/components/clients-carousel"
 import { listCollections } from "@lib/data/collections"
+import GalleryHeroLink from "@modules/home/components/gallery/gallery-hero-link"
 import { getRegion } from "@lib/data/regions"
 
 export const metadata: Metadata = {
@@ -30,8 +33,11 @@ export default async function Home(props: {
 
   return (
     <>
-      <Hero />
       <ProductCategoriesSection /> 
+      <Hero />
+       <GalleryHeroLink />
+      <GallerySection />
+      <ClientsCarousel />
     </>
   )
 }

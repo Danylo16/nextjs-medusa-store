@@ -64,17 +64,18 @@ const Item: React.FC<AccordionItemProps> = ({
           </div>
           {subtitle && (
             <Text as="span" size="small" className="mt-1">
-              {subtitle}
+              {subtitle}dfdgg
             </Text>
           )}
         </div>
       </AccordionPrimitive.Header>
       <AccordionPrimitive.Content
-        forceMount={forceMountContent}
-        className={clx(
-          "radix-state-closed:animate-accordion-close radix-state-open:animate-accordion-open radix-state-closed:pointer-events-none px-1"
-        )}
-      >
+      forceMount={forceMountContent}
+      className={clx(
+        "overflow-hidden radix-state-closed:animate-accordion-close radix-state-open:animate-accordion-open radix-state-closed:pointer-events-none px-1"
+      )}
+    >
+
         <div className="inter-base-regular group-radix-state-closed:animate-accordion-close">
           {description && <Text>{description}</Text>}
           <div className="w-full">{children}</div>

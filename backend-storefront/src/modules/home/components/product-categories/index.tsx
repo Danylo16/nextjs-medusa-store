@@ -9,9 +9,9 @@ export default function ProductCategoriesSection() {
     <section className="section">
       <div className="content-container">
         <div className="text-center space-y-3">
-          <h2>Product Categories</h2>
-          <p className="text-large-regular text-muted max-w-xl mx-auto">
-            Choose the category you're interested in — explore our detailed catalog.
+          <h2>Категорії</h2>
+          <p className="text-large-regular  max-w-xl mx-auto">
+             Оберіть категорію продуктів, щоб дослідити наш широкий асортимент високоякісного обладнання для реабілітації та фізіотерапії.
           </p>
         </div>
 

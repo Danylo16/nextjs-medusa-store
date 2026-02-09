@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_blocks_videos",
+  "info": {
+    "displayName": "video"
+  },
+  "options": {},
+  "attributes": {
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "title": {
+      "type": "text"
+    }
+  },
+  "config": {}
+}

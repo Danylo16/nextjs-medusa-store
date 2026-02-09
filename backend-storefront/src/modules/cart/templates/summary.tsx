@@ -1,46 +1,29 @@
-"use client"
-
-import { Button, Heading } from "@medusajs/ui"
-
+import { Heading } from "@medusajs/ui"
 import CartTotals from "@modules/common/components/cart-totals"
-import Divider from "@modules/common/components/divider"
-import DiscountCode from "@modules/checkout/components/discount-code"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { HttpTypes } from "@medusajs/types"
+import CartLeadForm from "@modules/cart/components/lead-form"
 
 type SummaryProps = {
-  cart: HttpTypes.StoreCart & {
-    promotions: HttpTypes.StorePromotion[]
-  }
-}
-
-function getCheckoutStep(cart: HttpTypes.StoreCart) {
-  if (!cart?.shipping_address?.address_1 || !cart.email) {
-    return "address"
-  } else if (cart?.shipping_methods?.length === 0) {
-    return "delivery"
-  } else {
-    return "payment"
-  }
+  cart: HttpTypes.StoreCart
 }
 
 const Summary = ({ cart }: SummaryProps) => {
-  const step = getCheckoutStep(cart)
+  const count = cart.items?.reduce((a, i) => a + (i.quantity ?? 0), 0) ?? 0
 
   return (
-    <div className="flex flex-col gap-y-4">
-      <Heading level="h2" className="text-[2rem] leading-[2.75rem]">
-        Summary
-      </Heading>
-      <DiscountCode cart={cart} />
-      <Divider />
+    <div className="card-soft border border-muted/70 p-4 md:p-5">
+      <div className="flex items-start justify-between gap-3">
+        <Heading level="h2" className="text-[20px] leading-[28px]">
+          Підсумок
+        </Heading>
+        <div className="text-xs text-foreground/60">{count} шт</div>
+      </div>
+
+      <div className="my-4 h-px bg-muted/80" />
+
       <CartTotals totals={cart} />
-      <LocalizedClientLink
-        href={"/checkout?step=" + step}
-        data-testid="checkout-button"
-      >
-        <Button className="w-full h-10">Go to checkout</Button>
-      </LocalizedClientLink>
+
+      <CartLeadForm />
     </div>
   )
 }

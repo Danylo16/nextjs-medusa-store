@@ -8,6 +8,8 @@ import RelatedProducts from "@modules/products/components/related-products"
 import SkeletonRelatedProducts from "@modules/skeletons/templates/skeleton-related-products"
 import { ProductDetailCard } from "@modules/products/components/product-detail-card"
 
+import ProductBreadcrumbs from "@modules/products/components/product-breadcrumbs"
+
 type ProductTemplateProps = {
   product: HttpTypes.StoreProduct
   region: HttpTypes.StoreRegion
@@ -33,16 +35,16 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
         className="content-container py-6"
         data-testid="product-container"
       >
+        <ProductBreadcrumbs product={product} countryCode={countryCode} />
         <ProductDetailCard
           product={product}
           region={region}
           content={contentBlocks}
         />
       </div>
-
-      {/* Блок з повʼязаними товарами лишаємо як був */}
+ 
       <div
-        className="content-container my-16 small:my-32"
+        className="content-container mt-16 mb-0 small:my-32"
         data-testid="related-products-container"
       >
         <Suspense fallback={<SkeletonRelatedProducts />}>

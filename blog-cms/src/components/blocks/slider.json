@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_blocks_sliders",
+  "info": {
+    "displayName": "slider"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "text"
+    },
+    "slides": {
+      "type": "component",
+      "component": "shared.slide",
+      "repeatable": true,
+      "min": 1
+    }
+  },
+  "config": {}
+}
