@@ -13,6 +13,10 @@ import { getProductPrice } from "@lib/util/get-product-price"
 export const metadata: Metadata = {
   title: "Пошук",
   description: "Search products in the store",
+  robots: {
+    index: false,
+    follow: false,
+  },
 }
 
 type SearchPageProps = {

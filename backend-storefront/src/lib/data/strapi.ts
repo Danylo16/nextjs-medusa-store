@@ -120,7 +120,7 @@ function addMediaFields(qs: URLSearchParams, baseKey: string) {
 function buildPopulateQS(mode: "list" | "single") {
   const qs = new URLSearchParams()
 
-  // Cover media (safe, no "*")
+  // Cover media: do NOT set populate[cover]=true if you also set nested fields.
   addMediaFields(qs, "populate[cover]")
 
   if (mode === "list") {
@@ -130,18 +130,25 @@ function buildPopulateQS(mode: "list" | "single") {
   // Dynamic zone itself
   qs.set("populate[sections]", "true")
 
-  // blocks.image -> image media
+  // Make sure non-media blocks are returned reliably
+  qs.set("populate[sections][on][blocks.rich-text]", "true")
+  qs.set("populate[sections][on][blocks.video]", "true")
+
+  // blocks.image -> image media (fields-only populate, no extra "=true" to avoid conflicts)
   addMediaFields(qs, "populate[sections][on][blocks.image][populate][image]")
 
-  // blocks.slider -> slides[].image media
-  addMediaFields(qs, "populate[sections][on][blocks.slider][populate][slides][populate][image]")
+  // blocks.slider -> slides[].image media (fields-only populate, no extra "=true" to avoid conflicts)
+  addMediaFields(
+    qs,
+    "populate[sections][on][blocks.slider][populate][slides][populate][image]"
+  )
 
   // blocks.faq -> items[] (repeatable component)
-  //  : explicit populate for nested components, avoids "nothing comes" cases.
   qs.set("populate[sections][on][blocks.faq][populate][items]", "true")
 
   return qs
 }
+
 
 export async function listPosts(): Promise<StrapiPost[]> {
   const qs = buildPopulateQS("list")
