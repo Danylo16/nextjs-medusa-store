@@ -62,3 +62,5 @@ Thumbs.db
 *.rar
 *.tar
 *.zip
+# local pnpm cache (do not commit)
+backend/.pnpm-store/

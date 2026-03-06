@@ -1,0 +1,30 @@
+FROM node:20-bookworm-slim AS deps
+WORKDIR /app
+RUN corepack enable
+COPY package.json yarn.lock .yarnrc.yml ./
+RUN yarn install --immutable
+
+FROM node:20-bookworm-slim AS build
+WORKDIR /app
+RUN corepack enable
+
+ARG NEXT_PUBLIC_MEDUSA_BACKEND_URL
+ARG NEXT_PUBLIC_STRAPI_URL
+ARG NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY
+ARG SKIP_STATIC_GENERATION=1
+
+ENV NEXT_PUBLIC_MEDUSA_BACKEND_URL=${NEXT_PUBLIC_MEDUSA_BACKEND_URL}
+ENV NEXT_PUBLIC_STRAPI_URL=${NEXT_PUBLIC_STRAPI_URL}
+ENV NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=${NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY}
+ENV SKIP_STATIC_GENERATION=${SKIP_STATIC_GENERATION}
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN yarn build
+
+FROM node:20-bookworm-slim AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=build /app ./
+EXPOSE 8000
+CMD ["yarn","start"]

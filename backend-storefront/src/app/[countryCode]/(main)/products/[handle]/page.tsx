@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic"
+
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { listProducts } from "@lib/data/products"
@@ -9,6 +11,8 @@ type Props = {
 }
 
 export async function generateStaticParams() {
+  if (process.env.SKIP_STATIC_GENERATION === "1") return []
+
   try {
     const countryCodes = await listRegions().then((regions) =>
       regions?.map((r) => r.countries?.map((c) => c.iso_2)).flat()

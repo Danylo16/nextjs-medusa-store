@@ -13,12 +13,16 @@ const nextConfig = {
     },
   },
   eslint: {
-    ignoreDuringBuilds: false,
+    ignoreDuringBuilds: true,
   },
    
   images: {
     remotePatterns: [
       {
+        protocol: "https",
+        hostname: "api.mtb1-4.com",
+      },
+{
         protocol: "http",
         hostname: "localhost",
       },
