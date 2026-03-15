@@ -19,6 +19,10 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
+	protocol: "https",
+	hostname: "cms.mtb1-4.com",
+      },	
+      {
         protocol: "https",
         hostname: "api.mtb1-4.com",
       },

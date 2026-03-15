@@ -49,13 +49,13 @@ export default async function BlogPostPage({ params }: Props) {
           ) : null}
         </header>
 
-        {hasSections ? (
-          <PostSections sections={post.sections!} />
-        ) : (
-          <div className="mt-10">
-            <StrapiBlocks content={post.content} />
-          </div>
-        )}
+        {post.content ? (
+ 	 <div className="mt-10">
+   	  <StrapiBlocks content={post.content} />
+ 	 </div>
+        ) : null}
+
+{hasSections ? <PostSections sections={post.sections!} /> : null}
       </article>
     </div>
   )
