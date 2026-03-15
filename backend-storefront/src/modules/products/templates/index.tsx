@@ -1,5 +1,3 @@
-/** backend-storefront\src\modules\products\templates\index.tsx */
-
 import React, { Suspense } from "react"
 import { notFound } from "next/navigation"
 import { HttpTypes } from "@medusajs/types"
@@ -7,8 +5,8 @@ import { HttpTypes } from "@medusajs/types"
 import RelatedProducts from "@modules/products/components/related-products"
 import SkeletonRelatedProducts from "@modules/skeletons/templates/skeleton-related-products"
 import { ProductDetailCard } from "@modules/products/components/product-detail-card"
-
 import ProductBreadcrumbs from "@modules/products/components/product-breadcrumbs"
+import { readProductContent } from "@lib/product-content"
 
 type ProductTemplateProps = {
   product: HttpTypes.StoreProduct
@@ -25,12 +23,10 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
     return notFound()
   }
 
-  // контент із metadata, який віддає бек
-  const contentBlocks = (product.metadata?.content_blocks || []) as any
+  const contentBlocks = readProductContent(product.metadata)
 
   return (
     <>
-      {/* Нова картка товару (весь верхній блок сторінки) */}
       <div
         className="content-container py-6"
         data-testid="product-container"
@@ -42,7 +38,7 @@ const ProductTemplate: React.FC<ProductTemplateProps> = ({
           content={contentBlocks}
         />
       </div>
- 
+
       <div
         className="content-container mt-16 mb-0 small:my-32"
         data-testid="related-products-container"

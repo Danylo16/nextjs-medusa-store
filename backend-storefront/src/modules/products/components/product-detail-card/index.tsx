@@ -34,7 +34,10 @@ export type BottomItem =
   | { type: "video_links"; items: VideoLink[] }
   | { type: "note"; text: string; variant?: "info" | "warning" }
 
-export type RichBlock = { type: "p"; text: string } | { type: "list"; items: string[] }
+export type RichBlock =
+  | { type: "heading"; level: 2 | 3 | 4; text: string }
+  | { type: "p"; text: string }
+  | { type: "list"; items: string[] }
 
 // ===================== PROPS =====================
 type ProductDetailCardProps = {
@@ -552,28 +555,45 @@ export function ProductDetailCard({ product, region, content }: ProductDetailCar
   }
 
   // ===================== V2 RENDER HELPERS =====================
-  const renderRichBlock = (b: RichBlock, key: number) => {
-    switch (b.type) {
-      case "p":
-        return (
-          <MarkdownText key={key} text={b.text} className="mb-4 leading-relaxed text-foreground" />
-        )
+const renderRichBlock = (b: RichBlock, key: number) => {
+  switch (b.type) {
+    case "heading": {
+      const Tag = b.level === 2 ? "h2" : b.level === 3 ? "h3" : "h4"
 
-      case "list":
-        return (
-          <ul key={key} className="mb-4 ml-2 list-inside list-disc space-y-2 text-foreground">
-            {b.items.map((it, i) => (
-              <li key={i}>
-                <MarkdownText inline text={it} />
-              </li>
-            ))}
-          </ul>
-        )
+      const headingClass =
+        b.level === 2
+          ? "mb-4 text-pretty text-2xl font-semibold text-foreground"
+          : b.level === 3
+          ? "mb-3 text-lg font-semibold text-foreground"
+          : "mb-3 text-base font-semibold text-foreground"
 
-      default:
-        return null
+      return (
+        <Tag key={key} className={headingClass}>
+          <MarkdownText inline text={b.text} />
+        </Tag>
+      )
     }
+
+    case "p":
+      return (
+        <MarkdownText key={key} text={b.text} className="mb-4 leading-relaxed text-foreground" />
+      )
+
+    case "list":
+      return (
+        <ul key={key} className="mb-4 ml-2 list-inside list-disc space-y-2 text-foreground">
+          {b.items.map((it, i) => (
+            <li key={i}>
+              <MarkdownText inline text={it} />
+            </li>
+          ))}
+        </ul>
+      )
+
+    default:
+      return null
   }
+} 
 
   const renderSidebarItem = (item: SidebarItem, key: number) => {
     switch (item.type) {

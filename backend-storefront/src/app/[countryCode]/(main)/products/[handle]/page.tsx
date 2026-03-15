@@ -4,6 +4,7 @@ import { Metadata } from "next"
 import { notFound } from "next/navigation"
 import { listProducts } from "@lib/data/products"
 import { getRegion, listRegions } from "@lib/data/regions"
+import { readProductSeo } from "@lib/product-content"
 import ProductTemplate from "@modules/products/templates"
 
 type Props = {
@@ -56,16 +57,16 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
-  const { handle } = params
-  const region = await getRegion(params.countryCode)
+  const { handle, countryCode } = params
+
+  const region = await getRegion(countryCode)
 
   if (!region) {
     notFound()
   }
 
   const product = await listProducts({
-    countryCode: params.countryCode,
-    // TS тут ниє що 'handle' немає в типі, але бекенд його підтримує → глушимо any
+    countryCode,
     queryParams: { handle } as any,
   }).then(({ response }) => response.products[0])
 
@@ -73,13 +74,31 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     notFound()
   }
 
+  const seo = readProductSeo(product.metadata, product)
+
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/$/, "") || "https://mtb1-4.com"
+
+  const canonical = `${baseUrl}/${countryCode}/products/${product.handle}`
+
   return {
-    title: `${product.title} | Medusa Store`,
-    description: `${product.title}`,
+    title: seo.title,
+    description: seo.description,
+    alternates: {
+      canonical,
+    },
     openGraph: {
-      title: `${product.title} | Medusa Store`,
-      description: `${product.title}`,
-      images: product.thumbnail ? [product.thumbnail] : [],
+      title: seo.title,
+      description: seo.description,
+      url: canonical,
+      type: "website",
+      images: seo.ogImage ? [{ url: seo.ogImage }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: seo.title,
+      description: seo.description,
+      images: seo.ogImage ? [seo.ogImage] : [],
     },
   }
 }
@@ -91,19 +110,16 @@ export default async function ProductPage(props: Props) {
   if (!region) {
     notFound()
   }
-  
+
   const pricedProduct = await listProducts({
     countryCode: params.countryCode,
-    // те саме: TS не знає про handle, бекенд знає
     queryParams: { handle: params.handle } as any,
   }).then(({ response }) => response.products[0])
-
-  console.log("CATEGORIES:", pricedProduct.categories)
 
   if (!pricedProduct) {
     notFound()
   }
- 
+
   return (
     <ProductTemplate
       product={pricedProduct}
