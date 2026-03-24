@@ -1,0 +1,53 @@
+From c46358334755ca2977d8a3060c16387405c81457 Mon Sep 17 00:00:00 2001
+From: Danylo <danylozubrii@gmail.com>
+Date: Sun, 15 Mar 2026 23:24:50 +0000
+Subject: [PATCH] Restore important production hotfixes from backup branch
+
+---
+ backend-storefront/next.config.js                  |  4 ++++
+ .../app/[countryCode]/(main)/blog/[slug]/page.tsx  | 14 +++++++-------
+ 2 files changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/backend-storefront/next.config.js b/backend-storefront/next.config.js
+index 648005f..f6b3f92 100644
+--- a/backend-storefront/next.config.js
++++ b/backend-storefront/next.config.js
+@@ -18,6 +18,10 @@ const nextConfig = {
+    
+   images: {
+     remotePatterns: [
++      {
++	protocol: "https",
++	hostname: "cms.mtb1-4.com",
++      },	
+       {
+         protocol: "https",
+         hostname: "api.mtb1-4.com",
+diff --git a/backend-storefront/src/app/[countryCode]/(main)/blog/[slug]/page.tsx b/backend-storefront/src/app/[countryCode]/(main)/blog/[slug]/page.tsx
+index b97ddfc..da1d05b 100644
+--- a/backend-storefront/src/app/[countryCode]/(main)/blog/[slug]/page.tsx
++++ b/backend-storefront/src/app/[countryCode]/(main)/blog/[slug]/page.tsx
+@@ -49,13 +49,13 @@ export default async function BlogPostPage({ params }: Props) {
+           ) : null}
+         </header>
+ 
+-        {hasSections ? (
+-          <PostSections sections={post.sections!} />
+-        ) : (
+-          <div className="mt-10">
+-            <StrapiBlocks content={post.content} />
+-          </div>
+-        )}
++        {post.content ? (
++ 	 <div className="mt-10">
++   	  <StrapiBlocks content={post.content} />
++ 	 </div>
++        ) : null}
++
++{hasSections ? <PostSections sections={post.sections!} /> : null}
+       </article>
+     </div>
+   )
+-- 
+2.34.1
+
